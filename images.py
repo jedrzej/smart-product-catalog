@@ -14,5 +14,9 @@ def caption_image(filename):
         data = f.read()
 
     response = requests.post(API_URL, headers=headers, data=data)
+    response_body = response.json()
 
-    return list(map(lambda r: r["generated_text"], response.json()))
+    if response.status_code != 200:
+        raise Exception(response_body["error"])
+
+    return list(map(lambda r: r["generated_text"], response_body))
